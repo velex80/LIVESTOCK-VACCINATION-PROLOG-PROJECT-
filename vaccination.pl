@@ -51,3 +51,26 @@ overdue(A, D) :- eligible(A, D), \+ protected(A, D).
 % compliant(A): no overdue vaccinations -> may get a movement permit
 compliant(A)         :- animal(A, _, _, _), \+ overdue(A, _).
 movement_permit(A)   :- compliant(A).
+
+% owner-level reasoning
+at_risk_owner(O) :- animal(A, _, O, _), overdue(A, _).
+
+% quarantine(O): owner has an unprotected animal against an active outbreak
+quarantine(O) :- outbreak(D), animal(A, _, O, _), overdue(A, D).
+
+% reminder(A,D,Msg): what the SMS/USSD system would send
+reminder(A, D, Msg) :-
+    overdue(A, D), animal(A, _, O, _),
+    format(atom(Msg), 'Dear ~w: animal ~w is overdue for ~w vaccine.', [O, A, D]).
+
+% overdue_count(Owner, N): number of distinct animals overdue
+overdue_count(O, N) :-
+    findall(A, (animal(A, _, O, _), overdue(A, _)), L),
+    sort(L, S), length(S, N).
+
+%% ---------- SAMPLE QUERIES ----------
+% ?- overdue(A, D).
+% ?- movement_permit(a6).
+% ?- quarantine(O).
+% ?- reminder(A, D, Msg).
+% ?- overdue_count(mutua, N).
