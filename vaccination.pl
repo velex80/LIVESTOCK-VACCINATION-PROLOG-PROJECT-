@@ -32,26 +32,6 @@ vaccinated(a5, newcastle,      4).
 vaccinated(a6, ppr,            1).
 vaccinated(a6, anthrax,        2).
 
-% outbreak(Disease): currently reported in the area
-outbreak(foot_and_mouth).
-
-%% ---------- RULES ----------
-% eligible(A,D): animal is old enough for vaccine D
-eligible(A, D) :-
-    animal(A, S, _, Age), requires(S, D, Min, _), Age >= Min.
-
-% protected(A,D): has a vaccination that has not expired
-protected(A, D) :-
-    animal(A, S, _, _), requires(S, D, _, Validity),
-    vaccinated(A, D, Ago), Ago < Validity.
-
-% overdue(A,D): eligible but not protected
-overdue(A, D) :- eligible(A, D), \+ protected(A, D).
-
-% compliant(A): no overdue vaccinations -> may get a movement permit
-compliant(A)         :- animal(A, _, _, _), \+ overdue(A, _).
-movement_permit(A)   :- compliant(A).
-
 % owner-level reasoning
 at_risk_owner(O) :- animal(A, _, O, _), overdue(A, _).
 
