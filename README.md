@@ -1,5 +1,4 @@
-==================================================
-    GROUP MEMBERS:
+  GROUP MEMBERS:
     - Velex Gicharu C026-01-0895/2025
     - Arnold Kibet C026-01-0815/2024
     - Cedric Odero C026-01-0985/2025
